@@ -30,3 +30,11 @@ func ScanLines(file *os.File, lines *[]string) {
 		*lines = append(*lines, line)
 	}
 }
+
+func CopyLines(source []string) []string {
+	var lines2 []string
+	for _, v := range source {
+		lines2 = append(lines2, v)
+	}
+	return lines2
+}
