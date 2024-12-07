@@ -175,7 +175,8 @@ func findOpCombination(values []int, expectedResult int) bool { ...
 ```
 Here applyOp decides what operation to apply depending on the first argument ( 0 for +, 1 for *, 2 for ||).. if it is 3 then just apply +; it will slow things down,  but will not affect the result; the code will be equally hard to understand and no memory will be used. Nice!
 
-The bit I am proudest of, is the way concat is implemented: 
+The bit I am proudest of, is the way concat is implemented: I originally wanted to roll out the loops and hard-code the ifs ... that would have looked gorgeously crazy, but compactness won gthe argument... and I desisted. 
+
 ```go
 func concat(o1 int, o2 int) int {
 	for decade := 10; ; decade *= 10 {
