@@ -8,6 +8,8 @@ This is my diary of the effort I put in to travel this path and keep up with thi
 
 The curious, odd, mildly amusing or even remotely noteworthy is collected here.
 
+P.S. The appearance of most emojis (such as 😸) warns of ugly puns in the vicinity  
+
 ## 2004 edition
 
 For 2004, I wanted to take a short coding vacation and revisit a long forgotten place I had seen before. 
