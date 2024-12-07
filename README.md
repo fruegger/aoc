@@ -16,7 +16,7 @@ As any self respecting tourist would, I surely would not miss any of the odditie
 
 And so it was that I made my way through goLand.
 
-Many a difficult piuzzle to solve would soon cross my way; armed with the utmost confidence that I'd always find the stupidest and most straightforward solution, 
+Many a difficult piuzzle to solve would soon cross my way; armed with the utmost confidence that I'd always find the stupidest and most naively intricate solution, 
 I took that first stride on my quest to find the silliest way possible to use goLand features, constructs and particularities.
 
 This are some entries in my log book:  
