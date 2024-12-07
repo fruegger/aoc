@@ -24,13 +24,26 @@ I took that first stride on my quest to find the silliest way possible to use go
 This are some entries in my log book:  
 
 #### Day 1
-Here we go again : the usual struggle with more than untotal recall:
+Here we go again : the usual struggle with more than untotal recall, fortunately I always carry a cheat sheet with me, here is an extract:
 
 What was the difference between array and slices again ?
+```An array has a fixed size. A slice, on the other hand, is a dynamically-sized, flexible view into the elements of an array. In practice, slices are much more common than arrays.```
 
 And what is a rune if not a glorified character ? 
+``The Go language defines the word rune as an alias for the type int32``
+indeed : glorified string characters.
+
+How did rang loop work ?
+```
+for i, s := range strings {
+	fmt.Println(i, s)
+}
+```
+that's neat i is the index, s is the value at that position ... also works for maps, arrays.
 
 What are the names of the commonly used packages and functions I need ?
+.. come on now; go find them.
+
 
 
 #### Day 2 
@@ -71,12 +84,12 @@ Hmmm... I could read and sort the rules, create a list of known pages ... write 
 I'll have none of that (even though a quick dash into quick sort territory would create sweetly complicated and ugly code); 
 
 I have a much sillier idea: the first line of code says it all:
-`
+```
 // order[x][y] >0  -> x follows y
 // order[x][y] <0  -> x precedes y
 // order[x][y] =0  -> order is unknown
 var order [100][100]int
-`
+```
 I'll build a comparison table that tells me for every pair of pages, which one should come first.
 I will even pretend I don't know it's symmetric ... no sir ... you have memory ... waste it !
 
