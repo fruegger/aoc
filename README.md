@@ -34,7 +34,7 @@ Here we go again : the usual struggle with more than untotal recall, fortunately
 indeed : glorified string characters.
 
 * How did range loop work ?
-```
+```go
 for i, s := range strings {
 	fmt.Println(i, s)
 }
@@ -67,6 +67,16 @@ Enjoy!
 
 By the way: the odd ball in there is the iota definition for constants: it increases every following value without you declaring it :
 exactlty what I thought : " say what ?".iota
+type ScanState uint8
+```go
+type ScanState uint8
+const (
+	SCAN_Start ScanState = iota
+	SCAN_M
+	SCAN_U
+	...
+)
+```
 
 #### Day 4
 This is the first riddle for this year, where I'm sanguine that it is a good idea to exercise a little on the parking lot and try 
