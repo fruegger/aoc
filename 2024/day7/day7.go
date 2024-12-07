@@ -38,6 +38,18 @@ func scanLine(line string) ([]int, int) {
 	return values, result
 }
 
+func findOpCombination(values []int, expectedResult int, considerConcat bool) bool {
+	incorrect := true
+	for combination := 0; combination < 1<<((len(values)-1)<<1) && incorrect; combination++ {
+		sum := values[0]
+		for i := 0; i < len(values)-1; i++ {
+			sum = applyOp((combination>>(i<<1))&3, sum, values[i+1], considerConcat)
+		}
+		incorrect = sum != expectedResult
+	}
+	return !incorrect
+}
+
 func applyOp(opId, opd1 int, opd2 int, considerConcat bool) int {
 	var result int
 	if opId == 1 {
@@ -58,16 +70,4 @@ func concat(o1 int, o2 int) int {
 			return o1*decade + o2
 		}
 	}
-}
-
-func findOpCombination(values []int, expectedResult int, considerConcat bool) bool {
-	incorrect := true
-	for combination := 0; combination < 1<<((len(values)-1)<<1) && incorrect; combination++ {
-		sum := values[0]
-		for i := 0; i < len(values)-1; i++ {
-			sum = applyOp((combination>>(i<<1))&3, sum, values[i+1], considerConcat)
-		}
-		incorrect = sum != expectedResult
-	}
-	return !incorrect
 }
