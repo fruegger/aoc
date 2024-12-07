@@ -2,6 +2,7 @@ package common
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -37,4 +38,17 @@ func CopyLines(source []string) []string {
 		lines2 = append(lines2, v)
 	}
 	return lines2
+}
+
+func StartDay(day uint8, inputType string) []string {
+	fmt.Println("Day ", day)
+	fmt.Println("=====")
+
+	filename := fmt.Sprintf("./day%d/day%d_%s.txt", day, day, inputType)
+	file := OpenFile(filename)
+	defer file.Close()
+	var lines []string
+
+	ScanLines(file, &lines)
+	return lines
 }
