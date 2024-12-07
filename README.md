@@ -66,8 +66,7 @@ to write a full fledged character-per-character reading state machine... all han
 Enjoy!
 
 By the way: the odd ball in there is the iota definition for constants: it increases every following value without you declaring it :
-exactlty what I thought : " say what ?".iota
-type ScanState uint8
+exactlty what I thought : " say what ?"
 ```go
 type ScanState uint8
 const (
@@ -93,7 +92,7 @@ Hmmm... I could read and sort the rules, create a list of known pages ... write 
 I'll have none of that (even though a quick dash into quick sort territory would create sweetly complicated and ugly code); 
 
 I have a much sillier idea: the first line of code says it all:
-```
+```go
 // order[x][y] >0  -> x follows y
 // order[x][y] <0  -> x precedes y
 // order[x][y] =0  -> order is unknown
@@ -102,29 +101,55 @@ var order [100][100]int
 I'll build a comparison table that tells me for every pair of pages, which one should come first.
 I will even pretend I don't know it's symmetric ... no sir ... you have memory ... waste it !
 
-Have I already uttered my utmost appreciation for the way the AoC girls and blokes never seem to trick you into goTCHAland (🙄) Well, without fail; there are indeed no pages in the updates that are not mentioned in the rules... 
+Have I already uttered my utmost appreciation for the way the AoC girls and blokes never seem to trick you into goTCHAland ? (🙄) Well, without fail; there are indeed no pages in the updates that are not mentioned in the rules... 
 
 ... and all strings have an odd length so that center pages indexes are always integers.
 
 that's nice.
 
 On the purely syntactic side - the lambda syntax used to pass a comparator to the generic sort is quite odd.
+```go
+sort.Slice(v,func(i, j int) bool {
+	return order[v[i]][v[j]] == -1
+})
+```
 
 #### Day 6
 
 Yeeeees !! A Labyrinth - I will certainly find a use for dropping breadcrumbs at the slightest provocation.
-A look to the left, one to the right ... no Minotaur in sight, no competing Ariadne, no bird eating up my breadcrumbs ..
+A look to the left, one to the right ... no Minotaur in sight (😁), no competing Ariadne, no bird eating up my breadcrumbs ..
 
 ... ret's curse and recurse!
-
+```go
+func predictPath(p Position, d Direction, lines []string) {
+	obj := lookAhead(p, d, lines)
+	if obj == OBJ_Nothing {
+		replaceSymAtPos(p, lines, SYM_Breadcrumb)
+		predictPath(p.move(d), d, lines)
+	} else {
+		if obj == OBJ_Obstacle {
+			predictPath(p, d.turnRight(), lines)
+		} else {
+			replaceSymAtPos(p, lines, SYM_Breadcrumb)
+		}
+	}
+}
+```
 The annoying bit was the fact that replacing a character in an existing string in go is a bit of a hassle.
 Also making copies of array is a pain in the pointers... mentioning which: 
 This time I was in luck - passing arguments to functions by reference or by value is immaterial in this case.
 
-
-I have done nothing horribly silly today ... I will correct the issue and goof around idly with ANSI / VT100 Terminal 
+I have done nothing horribly silly today ... yet. I will correct the issue and goof around idly with ANSI / VT100 Terminal 
 escape sequences.
-The effect of watching breadcrumbs and obstructions drop on the map as the solution is calculated 
+```go
+const GREEN = "\x1B[32m"
+const BLUE = "\x1B[34m"
+const WHITE = "\x1B[97m"
+const RED = "\x1B[31m"
+const YELLOW = "\x1B[33m"
+```
+I also wanted to use cusror motion sequences. The effect of watching breadcrumbs and obstructions drop on the map as the solution is calculated 
 is very nice on the small example map, but unfortunately will scramble up the real map completely.
 
 So I'll b e satisfied with a childishly colorful depiction of the map... glorious waste of time! 
+
