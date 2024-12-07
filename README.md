@@ -23,7 +23,7 @@ I took that first stride on my quest to find the silliest way possible to use go
 
 This are some entries in my log book:  
 
-#### Day 1
+### Day 1
 Here we go again : the usual struggle with more than untotal recall, fortunately I always carry a cheat sheet with me, here is an extract:
 
 * What was the difference between array and slices again ?
@@ -45,7 +45,7 @@ that's neat i is the index, s is the value at that position ... also works for m
 .. come on now; go find them.
 
 
-#### Day 2 
+### Day 2 
 I have a strong feeling that I'm moving in circles ... Things are definitely repeating : tme to define a module.
 goLang does not let you define more than one package in the same folder; 
 so I just defined a module, which is nothing else thah a collection of packages.
@@ -54,7 +54,7 @@ Also I moved some code I'd use over and over in a common package.
 
 The odd thing to remember, is that everything Capitalized is public, all smallcase is private : go figure ( :laughing: ).  
 
-#### Day 3
+### Day 3
 I will not use regex again, they are evil, i will not ....
 ... and then again ... but, NO, really no; i will not use regexes if it kills me.
 
@@ -77,7 +77,7 @@ const (
 )
 ```
 
-#### Day 4
+### Day 4
 This is the first riddle for this year, where I'm sanguine that it is a good idea to exercise a little on the parking lot and try 
 my solution on the example data in the story before dashing out on the real data interstate.
 All nicely straight forward, linear and repetitive ... good boring stuff.
@@ -85,7 +85,7 @@ The only sparkle of worrying semi-intelligence I'm coughing up is the fact that 
 
 Knowing that the AoC chaps and gentleladies are nice people at heart ... I assumed (correctly) that all lines have the same length.
 
-#### Day 5
+### Day 5
 
 Hmmm... I could read and sort the rules, create a list of known pages ... write my own sort ...
 
@@ -114,7 +114,7 @@ sort.Slice(v,func(i, j int) bool {
 })
 ```
 
-#### Day 6
+### Day 6
 
 Yeeeees !! A Labyrinth - I will certainly find a use for dropping breadcrumbs at the slightest provocation.
 A look to the left, one to the right ... no Minotaur in sight (😁), no competing Ariadne, no bird eating up my breadcrumbs ..
@@ -153,7 +153,7 @@ is very nice on the small example map, but unfortunately will scramble up the re
 
 So I'll b e satisfied with a childishly colorful depiction of the map... glorious waste of time! 
 
-#### Day 7
+### Day 7
 The day before yesterday, I advocated profusely that wasting memory space is an art to be trained and perfected. Loud acclamations failed to echo, heads did surprisingly not nod accondiscendently and hands did not clap.
 
 To cut a long story short ... the world was unimpressed, unconvinced uand vastly unaffected, hence my change of heart: maybe memory frugality is not the worst of virtues.
@@ -185,5 +185,5 @@ func concat(o1 int, o2 int) int {
 	}
 }
 ```
-Quick, memory saving, ugly as sin; love it.
-
+Quick, memory saving, ugly as sin; love it.  All in 73 lines of code inluding all boilerplate... a lovely nectar of code stupidity.  
+ 
