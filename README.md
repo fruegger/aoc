@@ -33,7 +33,7 @@ Here we go again : the usual struggle with more than untotal recall, fortunately
 ``The Go language defines the word rune as an alias for the type int32``
 indeed : glorified string characters.
 
-* How did rang loop work ?
+* How did range loop work ?
 ```
 for i, s := range strings {
 	fmt.Println(i, s)
