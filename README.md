@@ -153,3 +153,37 @@ is very nice on the small example map, but unfortunately will scramble up the re
 
 So I'll b e satisfied with a childishly colorful depiction of the map... glorious waste of time! 
 
+#### Day 7
+The day before yesterday, I advocated profusely that wasting memory space is an art to be trained and perfected. Loud acclamations failed to echo, heads did surprisingly not nod accondiscendently and hands did not clap.
+
+To cut a long story short ... the world was unimpressed, unconvinced uand vastly unaffected, hence my change of heart: maybe memory frugality is not the worst of virtues.
+Today I therefore persist in my quest for imbecile coding and will steer in the diametrally opposite direction; I'll pack as much as I can into as little memory as I can .. and since I am at it, I will also try to write some seriously dense code.
+
+I can save a few lines of code by NOT creating permutations of operations or defining those operation in the first place. 
+
+I'll just increase a good old integer counter and look at it as a permutation of bits each denoting an operation(or actually groups of two-bits, for the second part); 
+
+I'll certainly not miss the opportunity to improve the code illegibility in that i'll use deliciously unreadable fully parentesized shifts and bitwise operations to extract the individual operations from the permutation; No need for verbous opeation names or structures; let's just hardcode everything compactly.
+
+```go
+func findOpCombination(values []int, expectedResult int) bool { ...
+	for combination := 0; combination < 1<<((len(values)-1)<<1) && incorrect; combination++ {
+		sum := values[0]
+		for i := 0; i < len(values)-1; i++ {
+			sum = applyOp((combination>>(i<<1))&3, sum, values[i+1])
+		}...}
+```
+Here applyOp decides what operation to apply depending on the first argument ( 0 for +, 1 for *, 2 for ||).. if it is 3 then just apply +; it will slow things down,  but will not affect the result; the code will be equally hard to understand and no memory will be used. Nice!
+
+The bit I am proudest of, is the way concat is implemented: 
+```go
+func concat(o1 int, o2 int) int {
+	for decade := 10; ; decade *= 10 {
+		if o2 < decade {
+			return o1*decade + o2
+		}
+	}
+}
+```
+Quick, memory saving, ugly as sin; love it.
+
