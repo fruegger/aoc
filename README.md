@@ -8,7 +8,7 @@ This is my diary of the effort I put in to travel this path and keep up with thi
 
 The curious, odd, mildly amusing or even remotely noteworthy is collected here.
 
-P.S. The appearance of most emojis (such as 😸) warns of ugly puns in the vicinity  
+P.S. The appearance of most emojis (such as 😆 or 🙄) warn of ugly puns in the vicinity  
 
 ## 2004 edition
 
@@ -80,9 +80,7 @@ var order [100][100]int
 I'll build a comparison table that tells me for every pair of pages, which one should come first.
 I will even pretend I don't know it's symmetric ... no sir ... you have memory ... waste it !
 
-Have I already uttered my utmost appreciation for the way the AoC girls and blokes never seem to trick you into goTCHAland ?
-
-Well, without fail; there are indeed no pages in the updates that are not mentioned in the rules... 
+Have I already uttered my utmost appreciation for the way the AoC girls and blokes never seem to trick you into goTCHAland (🙄) Well, without fail; there are indeed no pages in the updates that are not mentioned in the rules... 
 
 ... and all strings have an odd length so that center pages indexes are always integers.
 
