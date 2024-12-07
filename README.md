@@ -26,14 +26,14 @@ This are some entries in my log book:
 #### Day 1
 Here we go again : the usual struggle with more than untotal recall, fortunately I always carry a cheat sheet with me, here is an extract:
 
-What was the difference between array and slices again ?
+* What was the difference between array and slices again ?
 ```An array has a fixed size. A slice, on the other hand, is a dynamically-sized, flexible view into the elements of an array. In practice, slices are much more common than arrays.```
 
-And what is a rune if not a glorified character ? 
+*And what is a rune if not a glorified character ? 
 ``The Go language defines the word rune as an alias for the type int32``
 indeed : glorified string characters.
 
-How did rang loop work ?
+*How did rang loop work ?
 ```
 for i, s := range strings {
 	fmt.Println(i, s)
@@ -41,9 +41,8 @@ for i, s := range strings {
 ```
 that's neat i is the index, s is the value at that position ... also works for maps, arrays.
 
-What are the names of the commonly used packages and functions I need ?
+*What are the names of the commonly used packages and functions I need ?
 .. come on now; go find them.
-
 
 
 #### Day 2 
