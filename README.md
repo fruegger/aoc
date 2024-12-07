@@ -10,7 +10,7 @@ The curious, odd, mildly amusing or even remotely noteworthy is collected here.
 
 ## 2004 edition
 
-For 2004, I wanted to take a short coding vacation and revisit a long forgotte place I had seen before. 
+For 2004, I wanted to take a short coding vacation and revisit a long forgotten place I had seen before. 
 This time I'd travel to a different programming coutry I had more or less fond remembrances of.
 As any self respecting tourist would, I surely would not miss any of the oddities, bizzare landmarks and memorable habits on my trip.
 
