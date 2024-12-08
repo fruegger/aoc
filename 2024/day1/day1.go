@@ -1,7 +1,7 @@
 package main
 
 import (
-	"advent/common"
+	"advent/aoc/common"
 	"bufio"
 	"fmt"
 	"log"
