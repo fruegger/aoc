@@ -13,19 +13,21 @@ P.S. The appearance of most emojis (such as 😆 or 🙄) warn of ugly puns in t
 ## 2024 edition
 
 For 2024, I wanted to take a short coding vacation and revisit a long forgotten place I had seen before. 
-This time I'd travel to a different programming coutry I had more or less fond remembrances of.
+I'd travel to a different programming coutry I had more or less fond remembrances of. 
+
 As any self respecting tourist would, I surely would not miss any of the oddities, bizzare landmarks and memorable habits on my trip.
 
-And so it was that I made my way through goLand.
+And so it was that I made my way through GoLand... and, as usual, I was determined to misbehave.
 
-Many a difficult piuzzle to solve would soon cross my way; armed with the utmost confidence that I'd always find the stupidest and most naively intricate solution, 
-I took that first stride on my quest to find the silliest way possible to use goLand features, constructs and particularities.
+Many a difficult puzzle to solve would soon cross my way; armed with the utmost confidence that I'd always find the stupidest and most naively intricate solution, 
+I took that first stride on my quest to find the silliest way possible to use Go features, constructs and particularities.
 
 This are some entries in my log book:  
 
 ---
 ### Day 1
-Here we go again : the usual struggle with more than untotal recall, fortunately I always carry a cheat sheet with me, here is an extract:
+Here we go again : the usual struggle with more than untotal recall. Did I turn off the gas before leaving? Where did I put my passort?  
+Fortunately I always carry a flashy cheat sheet with me, here is an extract:
 
 * What was the difference between array and slices again ?
 ```An array has a fixed size. A slice, on the other hand, is a dynamically-sized, flexible view into the elements of an array. In practice, slices are much more common than arrays.```
@@ -42,25 +44,27 @@ for i, s := range strings {
 ```
 that's neat i is the index, s is the value at that position ... also works for maps, arrays.
 
-* What are the names of the commonly used packages and functions I need ?
+* What are the names of the commonly used packages, functions and restaurants I need ?
 .. come on now; go find them.
 
 ---
 ### Day 2 
-I have a strong feeling that I'm moving in circles ... Things are definitely repeating : time to define a module.
-goLang does not let you define more than one package in the same folder; 
+Strolling around Go Town, I have a strong feeling that I'm moving in circles ... Things are definitely repeating : time to define a module.
+Go does not let you define more than one package in the same folder; 
 so I just defined a module, which is nothing else thah a collection of packages.
 
 Also I moved some code I'd use over and over in a common package. 
 
-The odd thing to remember, is that everything Capitalized is public, all smallcase is private : go figure ( :laughing: ).  
+The odd thing to remember, is that everything Capitalized is public, all smallcase is private : Go figure ( :laughing: ).  
 
 ---
 ### Day 3
+What a wonderful morning! I wonder if I should travel by regex or just walk today.
+
 I will not use regex again, they are evil, i will not ....
 ... and then again ... but, NO, really no; i will not use regexes if it kills me.
 
-And, what's more: a fabulous opportunity for a trip along memory lane... oh, well, maybe somebody else's memory 
+And, what's more: this is a fabulous opportunity for a trip along memory lane... oh, well, maybe somebody else's memory 
 if I'm completely honest.
 Be it as it will: it's hard to use up more lines of code to attack this otherwise quite scantily solvable puzzle than 
 to write a full fledged character-per-character reading state machine... all hand crafted, beautifully wasteful and awesomely overcomplicated.
@@ -81,6 +85,7 @@ const (
 
 ---
 ### Day 4
+I knew I should have bought a train ticket ... what possessed me to rent a XMASleigh ? 
 This is the first riddle for this year, where I'm sanguine that it is a good idea to exercise a little on the parking lot and try 
 my solution on the example data in the story before dashing out on the real data interstate.
 All nicely straight forward, linear and repetitive ... good boring stuff.
@@ -90,7 +95,6 @@ Knowing that the AoC chaps and gentleladies are nice people at heart ... I assum
 
 ---
 ### Day 5
-
 Hmmm... I could read and sort the rules, create a list of known pages ... write my own sort ...
 
 I'll have none of that (even though a quick dash into quick sort territory would create sweetly complicated and ugly code); 
@@ -139,7 +143,7 @@ func predictPath(p Position, d Direction, lines []string) {
 	}
 }
 ```
-The annoying bit was the fact that replacing a character in an existing string in go is a bit of a hassle.
+The annoying bit was the fact that replacing a character in an existing string in Go is a bit of a hassle.
 Also making copies of array is a pain in the pointers... mentioning which: 
 This time I was in luck - passing arguments to functions by reference or by value is immaterial in this case.
 
@@ -159,7 +163,7 @@ So I'll b e satisfied with a childishly colorful depiction of the map... gloriou
 
 ---
 ### Day 7
-The day before yesterday, I advocated profusely that wasting memory space is an art to be trained and perfected. Loud acclamations failed to echo, heads did surprisingly not nod accondiscendently and hands did not clap.
+The day before yesterday, I advocated profusely that wasting space is an art to be trained and perfected. Loud acclamations failed to echo, heads did surprisingly not nod accondiscendently and hands were not clapped in any audible applause.
 
 To cut a long story short ... the world was unimpressed, unconvinced uand vastly unaffected, hence my change of heart: maybe memory frugality is not the worst of virtues.
 Today I therefore persist in my quest for imbecile coding and will steer in the diametrally opposite direction; I'll pack as much as I can into as little memory as I can .. and since I am at it, I will also try to write some seriously dense code.
@@ -168,7 +172,7 @@ I can save a few lines of code by NOT creating permutations of operations or def
 
 I'll just increase a good old integer counter and look at it as a permutation of bits each denoting an operation(or actually groups of two-bits, for the second part); 
 
-I'll certainly not miss the opportunity to improve the code illegibility in that i'll use deliciously unreadable fully parentesized shifts and bitwise operations to extract the individual operations from the permutation; No need for verbous opeation names or structures; let's just hardcode everything compactly.
+I'll certainly not miss the opportunity to improve the code illegibility in that I'll use deliciously unreadable fully parentesized shifts and bitwise operations to extract the individual operations from the permutation; No need for verbous opeation names or structures; let's just hardcode everything compactly.
 
 ```go
 func findOpCombination(values []int, expectedResult int) bool { ...
@@ -180,7 +184,7 @@ func findOpCombination(values []int, expectedResult int) bool { ...
 ```
 Here applyOp decides what operation to apply depending on the first argument ( 0 for +, 1 for *, 2 for ||).. if it is 3 then just apply +; it will slow things down,  but will not affect the result; the code will be equally hard to understand and no memory will be used. Nice!
 
-The bit I am proudest of, is the way concat is implemented: I originally wanted to roll out the loops and hard-code the ifs ... that would have looked gorgeously crazy, but compactness won gthe argument... and I desisted. 
+The bit I am most thrilled with, is the way ``concat`` is implemented: I originally wanted to roll out the loops and hard-code the ifs ... that would have looked gorgeously crazy, but compactness won the argument... and I reluctantly desisted. 
 
 ```go
 func concat(o1 int, o2 int) int {
@@ -191,7 +195,17 @@ func concat(o1 int, o2 int) int {
 	}
 }
 ```
-Quick, memory saving, ugly as sin; love it.  All in 73 lines of code inluding all boilerplate... a lovely nectar of code stupidity.  
+Quick, memory saving, very ugly; love it.  All in 73 lines of code inluding all boilerplate... a lovely nectar of code stupidity.  
 
 ---
 ### Day 8 
+To those who would have accused me of being intentionally obtuse for yesterday's accomplishments, had anyone bothered to read my diary at all, I would have to reply that "yes of course, what else did you expect". 
+
+There is however a problem with the previous sentence, and it's not the verbs; those are fine: The problem is that we all know that a good measure of genuine thickness went into my doing, so I'll temporarily suspend the coding stupidity for some time. 
+
+Anyway; wondering about Go today, I really realized how spartan the country is : 
+* the absence of lavish operation overloading is just a minor nuisance, but
+* while refactoring for reuse, I moved some code to a different package, and I had to Capitalize what I wanted to use from outside ... that created many more changes than I would have reasonably expected.
+* sets and other data structures, as well as generics, are unknown to mankind in Go ... The experience of implementing a surrogate method to would only add an element to a slice if it were not there already, felt pedestrian at best.
+Disappointing... Don't misunderstand me please; i feel very little sympathy for generics; they are almost as evil as regex when misused ...  there is both too much of a good thing and to tille of it.
+
