@@ -206,6 +206,6 @@ There is however a problem with the previous sentence, and it's not the verbs; t
 Anyway; wondering about Go today, I really realized how spartan the country is : 
 * the absence of lavish operation overloading is just a minor nuisance, but
 * while refactoring for reuse, I moved some code to a different package, and I had to Capitalize what I wanted to use from outside ... that created many more changes than I would have reasonably expected.
-* sets and other data structures, as well as generics, are unknown to mankind in Go ... The experience of implementing a surrogate method to would only add an element to a slice if it were not there already, felt pedestrian at best.
+* sets and other data structures, as well as generics, are unknown to mankind in Go ... The experience of implementing a surrogate method that would only add an element to a slice if it were not there already, felt pedestrian at best.
 Disappointing... Don't misunderstand me please; i feel very little sympathy for generics; they are almost as evil as regex when misused ...  there is both too much of a good thing and to tille of it.
 
