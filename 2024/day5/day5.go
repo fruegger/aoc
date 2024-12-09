@@ -16,7 +16,7 @@ func main() {
 	fmt.Println("Day 5")
 	fmt.Println("=====")
 
-	file := common.OpenFile("./day5/day5_input.txt")
+	file := common.OpenFile("./day5/day5_input_h.txt")
 	defer file.Close()
 
 	var lines []string

@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	lines := common.StartDay(7, "input")
+	lines := common.StartDay(7, "input_h")
 	fmt.Println(lines)
 	total := sumCorrectEquations(lines, false)
 	fmt.Println("Part 1 :", total)

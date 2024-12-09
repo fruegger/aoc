@@ -9,18 +9,15 @@ const EMPTY_BLOCK = -1
 
 func main() {
 
-	lines := common.StartDay(9, "input")
+	lines := common.StartDay(9, "input_h")
 	//let's try simply a list if file ids per block (free := -1)
 	diskBlocks := decodeBlocks(lines[0])
-	fmt.Println(diskBlocks)
 	compactBlocks(&diskBlocks)
-	fmt.Println(diskBlocks)
 	checksum := computeChecksum(diskBlocks)
 	fmt.Println("Part 1 : ", checksum)
 
 	diskBlocks = decodeBlocks(lines[0])
 	moveBlocks(&diskBlocks)
-	fmt.Println(diskBlocks)
 	checksum = computeChecksum(diskBlocks)
 	fmt.Println("Part 2 : ", checksum)
 

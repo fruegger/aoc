@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	lines := common.StartDay(8, "input")
+	lines := common.StartDay(8, "input_h")
 	antiNodes := findAllAntinodes(lines, false)
 	printMap(lines, antiNodes)
 	fmt.Println("Part 1: ", len(antiNodes))
