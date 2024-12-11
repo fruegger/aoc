@@ -47,3 +47,10 @@ func (d Direction) TurnRight() Direction {
 func (p1 Position) DistanceTo(p2 Position) Distance {
 	return Distance{Dx: p2.X - p1.X, Dy: p2.Y - p1.Y}
 }
+
+func AtPosition(lines []string, pos Position) uint8 {
+	return lines[pos.Y][pos.X]
+}
+func SizeOfLines(lines []string) Position {
+	return Position{X: len(lines[0]), Y: len(lines)}
+}
