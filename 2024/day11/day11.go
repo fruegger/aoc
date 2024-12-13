@@ -3,22 +3,23 @@ package main
 import (
 	"advent/aoc/common"
 	"fmt"
-	"strings"
 )
 
 func main() {
 	lines := common.StartDay(11, "test2")
 	input := lines[0]
+
+	initProductions()
+	initTenPow()
+
 	var c BlinkStoneCompiler
 	c.init()
 	c.start(input)
-	result := 0
-	for i := 0; i < 25; i++ {
-		for !c.scanner.Eof {
-			c.parse()
-		}
-		result = len(strings.Split(c.backend.output, " "))
-		c.start(c.backend.output)
-	}
-	fmt.Println("Part1 : ", result-1)
+	result := c.compile(6)
+	fmt.Println("Part1 : ", result)
+
+	c.init()
+	c.start(input)
+	result = c.compile(75)
+	fmt.Println("Part2 : ", result)
 }
