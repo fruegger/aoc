@@ -4,6 +4,7 @@ type Position struct {
 	X int
 	Y int
 }
+type Dimension = Position
 
 type Direction struct {
 	Dx     int
