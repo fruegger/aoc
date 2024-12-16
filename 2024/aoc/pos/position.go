@@ -19,6 +19,9 @@ var DOWN = Direction{Dx: 0, Dy: 1, Symbol: "v"}
 var LEFT = Direction{Dx: -1, Dy: 0, Symbol: "<"}
 var UP = Direction{Dx: 0, Dy: -1, Symbol: "^"}
 
+var Directions = map[string]Direction{
+	UP.Symbol: UP, RIGHT.Symbol: RIGHT, DOWN.Symbol: DOWN, LEFT.Symbol: LEFT}
+
 func (p Position) Equals(p2 Position) bool {
 	return p.X == p2.X && p.Y == p2.Y
 }
@@ -45,13 +48,10 @@ func (d Direction) TurnRight() Direction {
 	return result
 }
 
-func (p1 Position) DistanceTo(p2 Position) Distance {
-	return Distance{Dx: p2.X - p1.X, Dy: p2.Y - p1.Y}
+func (p Position) DistanceTo(p2 Position) Distance {
+	return Distance{Dx: p2.X - p.X, Dy: p2.Y - p.Y}
 }
 
 func AtPosition(lines []string, pos Position) uint8 {
 	return lines[pos.Y][pos.X]
-}
-func SizeOfLines(lines []string) Position {
-	return Position{X: len(lines[0]), Y: len(lines)}
 }
