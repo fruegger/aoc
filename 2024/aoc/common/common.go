@@ -1,6 +1,7 @@
 package common
 
 import (
+	"advent/aoc/pos"
 	"bufio"
 	"fmt"
 	"log"
@@ -38,6 +39,33 @@ func CopyLines(source []string) []string {
 		lines2 = append(lines2, v)
 	}
 	return lines2
+}
+
+func FindAllSymbols(source []string, sym uint8) []pos.Position {
+	var result []pos.Position
+	for y := 0; y < len(source); y++ {
+		for x := 0; x < len(source); x++ {
+			if source[y][x] == sym {
+				result = append(result, pos.Position{X: x, Y: y})
+			}
+		}
+	}
+	return result
+}
+
+func FindSymbol(source []string, sym uint8) (pos.Position, bool) {
+	for y := 0; y < len(source); y++ {
+		for x := 0; x < len(source); x++ {
+			if source[y][x] == sym {
+				return pos.Position{X: x, Y: y}, true
+			}
+		}
+	}
+	return pos.Position{}, false
+}
+
+func ChangeSymbol(lines *[]string, p pos.Position, sym uint8) {
+	(*lines)[p.Y] = (*lines)[p.Y][:p.X] + string(sym) + (*lines)[p.Y][p.X+1:]
 }
 
 func StartDay(day uint8, inputType string) []string {
