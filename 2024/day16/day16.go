@@ -55,19 +55,17 @@ func (m *Maze) initialize(lines []string) bool {
 	return true
 }
 
-var iter = 0
-
 type Move struct {
 	p pos.Position
 	d pos.Direction
 	s int
 }
 
+var mq = Queue{}
+
 type Queue struct {
 	moves []Move
 }
-
-var mq = Queue{}
 
 func (q *Queue) queueMove(m Move) {
 	q.moves = append(q.moves, m)
@@ -142,20 +140,20 @@ func (m *Maze) DFSwalk(move Move) {
 			d3 := turnClockwise(d)
 			p3 := p.Move(d3)
 			if m.accepts(p3) && !m.visited[p3.Y][p3.X] {
-				m.visited[p3.Y][p3.X] = true
+				//m.visited[p3.Y][p3.X] = true
 				m.DFSwalk(Move{p: p3, d: d3, s: s + 1001})
 				m.visited[p3.Y][p3.X] = false
 			}
 			p1 := p.Move(d)
 			if m.accepts(p1) && !m.visited[p1.Y][p1.X] {
-				m.visited[p1.Y][p1.X] = true
+				//m.visited[p1.Y][p1.X] = true
 				m.DFSwalk(Move{p: p1, d: d, s: s + 1})
 				m.visited[p1.Y][p1.X] = false
 			}
 			d2 := turnCounterclockwise(d)
 			p2 := p.Move(d2)
 			if m.accepts(p2) && !m.visited[p2.Y][p2.X] {
-				m.visited[p2.Y][p2.X] = true
+				//m.visited[p2.Y][p2.X] = true
 				m.DFSwalk(Move{p: p2, d: d2, s: s + 1001})
 				m.visited[p2.Y][p2.X] = false
 			}
@@ -198,6 +196,7 @@ func (m *Maze) walk(move Move) bool {
 
 func (m *Maze) accepts(p pos.Position) bool {
 	return m.field[p.Y][p.X] == NOTHING || (m.field)[p.Y][p.X] == START || (m.field)[p.Y][p.X] == END
+
 }
 
 func (m *Maze) debugMaze() {
