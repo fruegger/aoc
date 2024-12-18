@@ -1,4 +1,4 @@
-package day16
+package main
 
 import (
 	"advent/aoc/common"

@@ -5,20 +5,39 @@ import (
 	"advent/aoc/maze"
 	"advent/aoc/pos"
 	"fmt"
+	"math"
 	"strings"
 )
 
 func main() {
+
 	const SIZEX = 71
 	const SIZEY = 71
+
 	const BYTESCOMING = 1024
 
-	lines := common.StartDay(18, "test")
+	lines := common.StartDay(18, "input")
 	m := maze.Maze{}
 	initializeMaze(&m, lines, SIZEX, SIZEY, BYTESCOMING)
 	m.PrintMaze()
+
 	result := m.Traverse(distanceFn)
 	fmt.Println("Part1 :", result)
+	start := BYTESCOMING + 1
+	end := len(lines) - 1
+	for start != end {
+		walk := (start + end) / 2
+		initializeMaze(&m, lines, SIZEX, SIZEY, walk)
+		result = m.Traverse(distanceFn)
+		if result == math.MaxInt {
+			end = walk - 1
+		} else {
+			start = walk + 1
+		}
+	}
+	m.PrintMaze()
+	fmt.Println("Part2 :", lines[start])
+
 }
 
 func distanceFn(p1 pos.Position, p2 pos.Position) int {

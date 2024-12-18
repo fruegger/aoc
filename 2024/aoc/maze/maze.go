@@ -89,14 +89,14 @@ func (m *Maze) Traverse(distance func(p1 pos.Position, p2 pos.Position) int) int
 				}
 			}
 			delete(unvisited, next.p)
-
-			for _, node := range unvisited {
-				if node.s < math.MaxInt {
-					fmt.Println(node.p, "-", node.s)
+			/*
+				for _, node := range unvisited {
+					if node.s < math.MaxInt {
+						fmt.Println(node.p, "-", node.s)
+					}
 				}
-			}
-			fmt.Println("------")
-
+				fmt.Println("------")
+			*/
 			if next.p.X == m.end.X && next.p.Y == m.end.Y {
 				m.bestScore = next.s
 			}
