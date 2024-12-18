@@ -33,6 +33,13 @@ func (p Position) Move(d Direction) Position {
 	}
 }
 
+func (p Position) Add(d Distance) Position {
+	return Position{
+		X: p.X + d.Dx,
+		Y: p.Y + d.Dy,
+	}
+}
+
 func (d Direction) TurnRight() Direction {
 	var result Direction
 	switch d {
