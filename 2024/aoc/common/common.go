@@ -65,7 +65,12 @@ func FindSymbol(source []string, sym uint8) (pos.Position, bool) {
 }
 
 func ChangeSymbol(lines *[]string, p pos.Position, sym uint8) {
-	(*lines)[p.Y] = (*lines)[p.Y][:p.X] + string(sym) + (*lines)[p.Y][p.X+1:]
+
+	right := ""
+	if p.X+1 < len((*lines)[p.Y]) {
+		right = (*lines)[p.Y][p.X+1:]
+	}
+	(*lines)[p.Y] = (*lines)[p.Y][:p.X] + string(sym) + right
 }
 
 func StartDay(day uint8, inputType string) []string {
