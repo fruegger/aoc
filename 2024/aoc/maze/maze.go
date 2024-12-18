@@ -40,35 +40,8 @@ var neighboursDeltas = []pos.Distance{
 
 var unvisited = map[pos.Position]Node{}
 
-func selectNextNode(result *Node) bool {
-	minS := math.MaxInt
-	if len(unvisited) == 0 {
-		return false
-	}
-	for p := range unvisited {
-		node := unvisited[p]
-		if node.s < minS {
-			*result = node
-			minS = node.s
-		}
-	}
-	return minS < math.MaxInt
-}
-
 func (m *Maze) Traverse(distance func(p1 pos.Position, p2 pos.Position) int) int {
-	for y := 0; y < len(m.field); y++ {
-		for x := 0; x < len(m.field[y]); x++ {
-			if m.field[y][x] != WALL {
-				if x == m.start.X && y == m.start.Y {
-					unvisited[m.start] = Node{p: m.start, s: 0}
-				} else {
-					p := pos.Position{X: x, Y: y}
-					unvisited[p] = Node{p: p, s: math.MaxInt}
-				}
-			}
-		}
-	}
-
+	m.initializeUnvisited()
 	hasMore := true
 	for hasMore {
 		var next Node
@@ -103,6 +76,36 @@ func (m *Maze) Traverse(distance func(p1 pos.Position, p2 pos.Position) int) int
 		}
 	}
 	return m.bestScore
+}
+
+func (m *Maze) initializeUnvisited() {
+	for y := 0; y < len(m.field); y++ {
+		for x := 0; x < len(m.field[y]); x++ {
+			if m.field[y][x] != WALL {
+				if x == m.start.X && y == m.start.Y {
+					unvisited[m.start] = Node{p: m.start, s: 0}
+				} else {
+					p := pos.Position{X: x, Y: y}
+					unvisited[p] = Node{p: p, s: math.MaxInt}
+				}
+			}
+		}
+	}
+}
+
+func selectNextNode(result *Node) bool {
+	minS := math.MaxInt
+	if len(unvisited) == 0 {
+		return false
+	}
+	for p := range unvisited {
+		node := unvisited[p]
+		if node.s < minS {
+			*result = node
+			minS = node.s
+		}
+	}
+	return minS < math.MaxInt
 }
 
 func (m *Maze) PrintMaze() {
