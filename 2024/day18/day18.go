@@ -21,14 +21,14 @@ func main() {
 	initializeMaze(&m, lines, SIZEX, SIZEY, BYTESCOMING)
 	m.PrintMaze()
 
-	result := m.Traverse(distanceFn)
+	result := m.Traverse(maze.UnityD, maze.IsNotWall)
 	fmt.Println("Part1 :", result)
 	start := BYTESCOMING + 1
 	end := len(lines) - 1
 	for start != end {
 		walk := (start + end) / 2
 		initializeMaze(&m, lines, SIZEX, SIZEY, walk)
-		result = m.Traverse(distanceFn)
+		result = m.Traverse(maze.UnityD, maze.IsNotWall)
 		if result == math.MaxInt {
 			end = walk - 1
 		} else {
@@ -38,17 +38,6 @@ func main() {
 	m.PrintMaze()
 	fmt.Println("Part2 :", lines[start])
 
-}
-
-func distanceFn(p1 pos.Position, p2 pos.Position) int {
-	return 1
-	/*
-		dist :=p1.DistanceTo(p2)
-		if dist.Dx<0 { dist.Dx = - dist.Dx }
-		if dist.Dy<0 { dist.Dy = - dist.Dy }
-		return dist.Dx + dist.Dy
-
-	*/
 }
 
 func initializeMaze(m *maze.Maze, lines []string, maxx int, maxy int, bytes int) {

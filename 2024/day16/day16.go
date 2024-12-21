@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	lines := common.StartDay(16, "test2")
+	lines := common.StartDay(16, "input")
 	m := Maze{}
 	initializeMaze(&m, lines)
 
@@ -200,35 +200,3 @@ func distanceFn(c1 Coord, c2 Coord) int {
 		}
 	}
 }
-
-/*
-func turnCounterclockwise(d pos.Direction) pos.Direction {
-	var result pos.Direction
-	switch d {
-	case pos.RIGHT:
-		result = pos.UP
-	case pos.UP:
-		result = pos.LEFT
-	case pos.LEFT:
-		result = pos.DOWN
-	case pos.DOWN:
-		result = pos.RIGHT
-	}
-	return result
-}
-
-func turnClockwise(d pos.Direction) pos.Direction {
-	var result pos.Direction
-	switch d {
-	case pos.RIGHT:
-		result = pos.DOWN
-	case pos.DOWN:
-		result = pos.LEFT
-	case pos.LEFT:
-		result = pos.UP
-	case pos.UP:
-		result = pos.RIGHT
-	}
-	return result
-}
-*/

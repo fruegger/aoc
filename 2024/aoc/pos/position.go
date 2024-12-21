@@ -54,6 +54,35 @@ func (d Direction) TurnRight() Direction {
 	}
 	return result
 }
+func (d Direction) TurnLeft() Direction {
+	var result Direction
+	switch d {
+	case RIGHT:
+		result = UP
+	case UP:
+		result = LEFT
+	case LEFT:
+		result = DOWN
+	case DOWN:
+		result = RIGHT
+	}
+	return result
+}
+
+func (d Direction) Opposite() Direction {
+	var result Direction
+	switch d {
+	case RIGHT:
+		result = LEFT
+	case DOWN:
+		result = UP
+	case LEFT:
+		result = RIGHT
+	case UP:
+		result = DOWN
+	}
+	return result
+}
 
 func (p Position) DistanceTo(p2 Position) Distance {
 	return Distance{Dx: p2.X - p.X, Dy: p2.Y - p.Y}

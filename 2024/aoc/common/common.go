@@ -77,6 +77,9 @@ func StartDay(day uint8, inputType string) []string {
 	fmt.Println("Day ", day)
 	fmt.Println("=====")
 
+	return ReadDayFile(day, inputType)
+}
+func ReadDayFile(day uint8, inputType string) []string {
 	filename := fmt.Sprintf("./day%d/day%d_%s.txt", day, day, inputType)
 	file := OpenFile(filename)
 	defer file.Close()
@@ -84,4 +87,5 @@ func StartDay(day uint8, inputType string) []string {
 
 	ScanLines(file, &lines)
 	return lines
+
 }
