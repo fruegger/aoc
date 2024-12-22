@@ -71,7 +71,7 @@ func sequence(pattern string, pos int, accepted []int) ([]int, bool) {
 func resetMatchers() []bool {
 	var result []bool
 	for i := 0; i < len(towels); i++ {
-		result = append(result)
+		result = append(result, true)
 	}
 	return result
 }
