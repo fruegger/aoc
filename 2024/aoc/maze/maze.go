@@ -23,6 +23,7 @@ type Maze struct {
 	distances           map[pos.Position]Node
 	maxDistance         int
 	stopAfterFirstFound bool
+	paths               []*Node
 }
 
 func (m *Maze) Initialize(lines []string, start pos.Position, end pos.Position) {
@@ -37,9 +38,9 @@ func (m *Maze) Initialize(lines []string, start pos.Position, end pos.Position) 
 }
 
 type Node struct {
-	P    pos.Position
-	dist int
-	best bool
+	P        pos.Position
+	dist     int
+	cameFrom *Node
 }
 
 var neighboursDeltas = []pos.Distance{
@@ -54,6 +55,7 @@ func (m *Maze) Traverse(
 	pathSymbol func(sym uint8) bool,
 ) int {
 	m.initializeUnvisited(pathSymbol)
+	m.paths = []*Node{}
 	hasMore := true
 	for hasMore {
 		var next Node
@@ -71,21 +73,18 @@ func (m *Maze) Traverse(
 								return m.maxDistance
 							}
 							n2.dist = newDist
+							n2.cameFrom = &next
 							m.unvisited[n2.P] = n2
-							n2.best = true
-							m.distances[n2.P] = n2
-						} else {
-							n2.best = false
-							m.distances[n2.P] = n2
 						}
+						m.distances[n2.P] = n2
 					}
 				}
 			}
 			delete(m.unvisited, next.P)
 			if next.P.X == m.end.X && next.P.Y == m.end.Y {
 				m.bestScore = next.dist
-				next.best = true
 				m.distances[next.P] = next
+				m.paths = append(m.paths, &next)
 				if m.stopAfterFirstFound {
 					return m.bestScore
 				}
@@ -103,7 +102,15 @@ func (m *Maze) DistanceFromStart(p pos.Position) int {
 }
 
 func (m *Maze) IsOnShortestPath(p pos.Position) bool {
-	return m.distances[p].best
+	for _, n := range m.paths {
+		for n2 := n; n2.cameFrom != nil; n2 = n2.cameFrom {
+			if n2.P == p {
+				return true
+			}
+		}
+	}
+	return false
+
 }
 
 func (m *Maze) ShortestPath() map[pos.Position]Node {
@@ -131,14 +138,14 @@ func (m *Maze) ChangeSymbol(p pos.Position, sym uint8) {
 }
 
 func (m *Maze) initializeUnvisited(pathSymbol func(sym uint8) bool) {
-	m.unvisited[m.start] = Node{P: m.start, dist: 0, best: true}
+	m.unvisited[m.start] = Node{P: m.start, dist: 0}
 	m.distances[m.start] = m.unvisited[m.start]
 	for y := 0; y < len(m.field); y++ {
 		for x := 0; x < len(m.field[y]); x++ {
 			if pathSymbol(m.field[y][x]) {
 				if x != m.start.X || y != m.start.Y {
 					p := pos.Position{X: x, Y: y}
-					m.unvisited[p] = Node{P: p, dist: math.MaxInt, best: false}
+					m.unvisited[p] = Node{P: p, dist: math.MaxInt}
 				}
 			}
 		}

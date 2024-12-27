@@ -55,7 +55,7 @@ func FindAllSymbols(source []string, sym uint8) []pos.Position {
 
 func FindSymbol(source []string, sym uint8) (pos.Position, bool) {
 	for y := 0; y < len(source); y++ {
-		for x := 0; x < len(source); x++ {
+		for x := 0; x < len(source[y]); x++ {
 			if source[y][x] == sym {
 				return pos.Position{X: x, Y: y}, true
 			}
