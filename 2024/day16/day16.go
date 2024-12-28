@@ -16,7 +16,7 @@ func main() {
 
 	m.PrintMaze()
 
-	result := m.Djikstra(distanceFn)
+	result := m.Dijkstra(distanceFn)
 	m.calculateBestPaths(&m.endNode)
 	best := m.bestPath.Size()
 	m.PrintMaze()
@@ -69,7 +69,7 @@ var neighboursDeltas = []pos.Distance{
 
 var unvisited = map[Coord]Node{}
 
-func (m *Maze) Djikstra(distance func(m *Maze, p1 Coord, p2 Coord) int) int {
+func (m *Maze) Dijkstra(distance func(m *Maze, p1 Coord, p2 Coord) int) int {
 	m.initializeUnvisited()
 	hasMore := true
 	for hasMore {

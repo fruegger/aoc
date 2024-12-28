@@ -21,14 +21,14 @@ func main() {
 	initializeMaze(&m, lines, SIZEX, SIZEY, BYTESCOMING)
 	m.PrintMaze()
 
-	result := m.Traverse(maze.UnityD, maze.IsNotWall)
+	result := m.Dijkstra(maze.UnityD, maze.IsNotWall)
 	fmt.Println("Part1 :", result)
 	start := BYTESCOMING + 1
 	end := len(lines) - 1
 	for start != end {
 		walk := (start + end) / 2
 		initializeMaze(&m, lines, SIZEX, SIZEY, walk)
-		result = m.Traverse(maze.UnityD, maze.IsNotWall)
+		result = m.Dijkstra(maze.UnityD, maze.IsNotWall)
 		if result == math.MaxInt {
 			end = walk - 1
 		} else {

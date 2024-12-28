@@ -4,45 +4,52 @@ import (
 	"advent/aoc/common"
 	"advent/aoc/maze"
 	"advent/aoc/pos"
-	"bufio"
 	"fmt"
-	"os"
+	"maps"
 )
 
 func main() {
-	lines := common.StartDay(20, "test")
+	lines := common.StartDay(20, "input")
 
 	var m maze.Maze
 	initializeMaze(&m, lines)
-	originalLen := m.Traverse(maze.UnityD, maze.IsNothing)
 	m.PrintMaze()
+	originalLen := m.Dijkstra(maze.UnityD, maze.IsNothing)
+	m.CalculateBestPaths(&m.EndNode)
+
 	fmt.Println("Without cheating: ", originalLen)
 	savings := map[int]int{}
 
-	findPossibleCheatsPart1(&m, lines)
-	collectSavings(m, cheatsPart1, &savings)
+	cheats := findPossibleCheats(&m, 1)
+	collectSavings(m, cheats, &savings)
 	m.PrintMaze()
 
 	printSavings(originalLen, savings)
 	total := 0
-	for i := 101; i < originalLen; i++ {
+	for i := 100; i < originalLen; i++ {
 		total += savings[i]
 	}
 	fmt.Println("Part 1: ", total)
 
+	m.PrintMaze()
+	originalLen = m.Dijkstra(maze.UnityD, maze.IsNothing)
+	m.CalculateBestPaths(&m.EndNode)
 	savings = map[int]int{}
 
-	findPossibleCheatsPart2(&m, lines)
-	collectSavings(m, cheatsPart2, &savings)
+	cheats = findPossibleCheats(&m, 19)
+	collectSavings(m, cheats, &savings)
 	printSavings(originalLen, savings)
-
+	for i := 100; i < originalLen; i++ {
+		total += savings[i]
+	}
+	fmt.Println("Part 2: ", total)
 }
 
 func printSavings(originalLen int, savings map[int]int) {
 	for i := 1; i < originalLen; i++ {
 		if savings[i] != 0 {
 			if savings[i] == 1 {
-				fmt.Println("There is one cheats that saves ", i, " picoseconds.")
+				fmt.Println("There is one cheat that saves ", i, " picoseconds.")
 			} else {
 				fmt.Println("There are ", savings[i], "cheats that save ", i, " picoseconds.")
 			}
@@ -51,132 +58,71 @@ func printSavings(originalLen int, savings map[int]int) {
 }
 
 type Cheat struct {
-	start  pos.Position
-	end    pos.Position
-	dir    pos.Direction
-	saving int
+	start pos.Position
+	end   pos.Position
 }
 
-var cheatsPart1 []Cheat
-
-func findPossibleCheatsPart1(m *maze.Maze, lines []string) {
-	for y := 1; y < len(lines)-1; y++ {
-		for x := 1; x < len(lines[y])-1; x++ {
-			p := pos.Position{X: x, Y: y}
-			if lines[p.Y][p.X] == maze.NOTHING || lines[p.Y][p.X] == maze.START {
-				var p2 pos.Position
-				for _, d := range pos.Directions {
-					if canCheatAt(lines, p, d, &p2) && !findCheat(cheatsPart1, p2, d.Opposite()) {
-						dist := m.DistanceFromStart(p) - m.DistanceFromStart(p2)
-						if dist < 0 {
-							dist = -dist
-						}
-						cheatsPart1 = append(cheatsPart1, Cheat{start: p, dir: d, end: p2, saving: dist - 2})
-					}
-				}
-			}
-		}
-	}
-}
-
-var cheatsPart2 []Cheat
-
-var buf = bufio.NewReader(os.Stdin)
-
-const CHEAT_START = 'A'
-const CHEAT_END = 'B'
-
-func findPossibleCheatsPart2(m *maze.Maze, lines []string) {
+func findPossibleCheats(m *maze.Maze, maxCheatLen int) map[Cheat]int {
 	// different approach
-
-	r := maze.Maze{}
-	for _, n1 := range m.ShortestPath() {
-		for _, n2 := range m.ShortestPath() {
-
-			dist := m.DistanceFromStart(n1.P) - m.DistanceFromStart(n2.P)
-			if dist < 0 {
-				dist = -dist
+	var cheats = map[Cheat]int{}
+	j := 0
+	for i1 := 0; i1 < len(*m.BestPath.Elements()); i1++ {
+		n1 := m.Nodes[(*m.BestPath.Elements())[i1]]
+		fmt.Print(j, ":")
+		j++
+		i := 0
+		for i2 := i1 + 1; i2 < len(*m.BestPath.Elements()); i2++ {
+			n2 := m.Nodes[(*m.BestPath.Elements())[i2]]
+			if i%1000 == 0 {
+				fmt.Print(".")
 			}
-			if dist > 1 {
-				/* debug */
-				/*				n1.P.X = 13
-								n1.P.Y = 3
-								n2.P.X = 12
-								n2.P.Y = 5
-				*/
-				r.Initialize(lines, n1.P, n2.P)
-				wasP1 := lines[n1.P.Y][n1.P.X]
-				wasP2 := lines[n2.P.Y][n2.P.X]
-				r.ChangeSymbol(n1.P, CHEAT_START)
-				r.ChangeSymbol(n2.P, CHEAT_END)
-				r.SetMaxDistance(21)
-				r.SetStopAfterFirstFound(true)
-				best := r.Traverse(maze.UnityD, IsWallOrCheat)
-
-				fmt.Print("Saving: ", dist-best)
-				if best < dist && best <= 20 && !findAnyCheat(cheatsPart2, n2.P, n1.P) {
-					fmt.Println(" accept")
-					r.PrintMaze()
-
-					_, err := buf.ReadBytes('\n')
-					if err != nil {
-					}
-
+			i++
+			if m.BestPath.Contains(n1.P) && m.BestPath.Contains(n2.P) {
+				dist := m.DistanceFromStart(n1.P) - m.DistanceFromStart(n2.P)
+				if dist < 0 {
+					dist = -dist
+				}
+				// Manhattan
+				bestD := n1.P.DistanceTo(n2.P)
+				best := 0
+				if bestD.Dy < 0 {
+					best -= bestD.Dy
 				} else {
-					fmt.Println(" reject")
+					best += bestD.Dy
 				}
-
-				if best < dist && best <= 20 && !findAnyCheat(cheatsPart2, n2.P, n1.P) {
-					cheatsPart2 = append(cheatsPart2, Cheat{start: n1.P, end: n2.P, saving: dist - best})
+				if bestD.Dx < 0 {
+					best -= bestD.Dx
+				} else {
+					best += bestD.Dx
 				}
-				r.ChangeSymbol(n1.P, wasP1)
-				r.ChangeSymbol(n2.P, wasP2)
-
+				if best < dist && best <= maxCheatLen+1 && !findAnyCheat(cheats, n2.P, n1.P) {
+					cheats[Cheat{start: n1.P, end: n2.P}] = dist - best
+				}
 			}
 		}
+		fmt.Println()
 	}
+	return cheats
 }
 
-func IsWallOrCheat(sym uint8) bool {
-	return sym == maze.WALL || sym == CHEAT_START || sym == CHEAT_END
+func findAnyCheat(cheats map[Cheat]int, p1 pos.Position, p2 pos.Position) bool {
+	_, found := cheats[Cheat{start: p1, end: p2}]
+	return found
 }
 
-func findCheat(cheats []Cheat, p pos.Position, d pos.Direction) bool {
-	for _, cheat := range cheats {
-		if cheat.start == p && cheat.dir == d {
-			return true
-		}
-	}
-	return false
-}
-
-func findAnyCheat(cheats []Cheat, p1 pos.Position, p2 pos.Position) bool {
-	for _, cheat := range cheats {
-		if cheat.start == p1 && cheat.end == p2 {
-			return true
-		}
-	}
-	return false
-}
-
-func collectSavings(m maze.Maze, cheats []Cheat, savings *map[int]int) {
-	for _, v := range cheats {
-		if !m.IsOnShortestPath(v.end) || !m.IsOnShortestPath(v.start) {
-			fmt.Println("not on best")
+func collectSavings(m maze.Maze, cheats map[Cheat]int, savings *map[int]int) {
+	for v := range maps.Keys(cheats) {
+		if !m.IsOnBestPath(v.end) || !m.IsOnBestPath(v.start) {
+			if !m.IsOnBestPath(v.end) {
+				fmt.Println("end not on best: ", v.end)
+			}
+			if !m.IsOnBestPath(v.start) {
+				fmt.Println("start not on best: ", v.start)
+			}
 		} else {
-			fmt.Println(v, " - ", v.saving)
-			(*savings)[v.saving]++
+			// fmt.Println(v, " - ", v.saving)
+			(*savings)[cheats[v]]++
 		}
-	}
-}
-
-func canCheatAt(lines []string, p pos.Position, d pos.Direction, end *pos.Position) bool {
-	p2 := p.Move(d)
-	*end = p2.Move(d)
-	if end.Y > 0 && end.Y < len(lines) && end.X > 0 && end.X < len(lines[end.Y]) {
-		return lines[p2.Y][p2.X] == maze.WALL && (lines[end.Y][end.X] == maze.NOTHING || lines[end.Y][end.X] == maze.END)
-	} else {
-		return false
 	}
 }
 
