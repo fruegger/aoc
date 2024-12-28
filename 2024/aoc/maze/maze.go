@@ -2,6 +2,7 @@ package maze
 
 import (
 	"advent/aoc/common"
+	"advent/aoc/ds"
 	"advent/aoc/pos"
 	"advent/aoc/term"
 	"fmt"
@@ -15,32 +16,38 @@ const NOTHING = '.'
 const OBSTACLE = 'O'
 
 type Maze struct {
-	field               []string
-	start               pos.Position
-	end                 pos.Position
-	bestScore           int
-	unvisited           map[pos.Position]Node
-	distances           map[pos.Position]Node
+	field     []string
+	Start     pos.Position
+	End       pos.Position
+	BestScore int
+	//28.12
+	unvisited map[pos.Position]*Node
+	Nodes     map[pos.Position]*Node
+	//	distances           map[pos.Position]*Node
+	EndNode             Node
 	maxDistance         int
 	stopAfterFirstFound bool
-	paths               []*Node
+	BestPath            ds.Set[pos.Position]
 }
 
 func (m *Maze) Initialize(lines []string, start pos.Position, end pos.Position) {
 	m.field = lines
-	m.start = start
-	m.bestScore = math.MaxInt
+	m.Start = start
+	m.BestScore = math.MaxInt
 	m.maxDistance = math.MaxInt
 	m.stopAfterFirstFound = false
-	m.end = end
-	m.unvisited = map[pos.Position]Node{}
-	m.distances = map[pos.Position]Node{}
+	m.End = end
+	m.unvisited = map[pos.Position]*Node{}
+	m.Nodes = map[pos.Position]*Node{}
+
+	m.BestPath = ds.Set[pos.Position]{}
 }
 
 type Node struct {
-	P        pos.Position
-	dist     int
-	cameFrom *Node
+	P    pos.Position
+	Dist int
+	//28.12
+	cameFrom []*Node
 }
 
 var neighboursDeltas = []pos.Distance{
@@ -50,12 +57,12 @@ var neighboursDeltas = []pos.Distance{
 	{Dx: 0, Dy: 1},
 }
 
-func (m *Maze) Traverse(
+func (m *Maze) Dijkstra(
 	distance func(p1 pos.Position, p2 pos.Position) int,
 	pathSymbol func(sym uint8) bool,
 ) int {
 	m.initializeUnvisited(pathSymbol)
-	m.paths = []*Node{}
+	//	m.paths = []*Node{}
 	hasMore := true
 	for hasMore {
 		var next Node
@@ -67,54 +74,49 @@ func (m *Maze) Traverse(
 				if p2.X > 0 && p2.Y > 0 && p2.Y+1 < len(m.field) && p2.X+1 < len(m.field[p2.Y]) && pathSymbol(m.field[p2.Y][p2.X]) {
 					n2, found := m.unvisited[p2]
 					if found {
-						newDist := distance(next.P, p2) + next.dist
-						if newDist < n2.dist {
-							if newDist >= m.maxDistance {
+						newDist := distance(next.P, p2) + next.Dist
+						if newDist <= n2.Dist {
+							if newDist > m.maxDistance {
 								return m.maxDistance
 							}
-							n2.dist = newDist
-							n2.cameFrom = &next
+							n2.Dist = newDist
+							n2.cameFrom = append(n2.cameFrom, &next)
 							m.unvisited[n2.P] = n2
 						}
-						m.distances[n2.P] = n2
 					}
 				}
 			}
 			delete(m.unvisited, next.P)
-			if next.P.X == m.end.X && next.P.Y == m.end.Y {
-				m.bestScore = next.dist
-				m.distances[next.P] = next
-				m.paths = append(m.paths, &next)
+			if next.P == m.End {
+				m.BestScore = next.Dist
+				m.EndNode.cameFrom = append(m.EndNode.cameFrom, &next)
+
 				if m.stopAfterFirstFound {
-					return m.bestScore
+					return m.BestScore
 				}
 			}
 		}
 	}
-	return m.bestScore
+	return m.BestScore
 }
 
 func (m *Maze) SetMaxDistance(distance int)           { m.maxDistance = distance }
 func (m *Maze) SetStopAfterFirstFound(firstOnly bool) { m.stopAfterFirstFound = firstOnly }
 
-func (m *Maze) DistanceFromStart(p pos.Position) int {
-	return m.distances[p].dist
-}
-
-func (m *Maze) IsOnShortestPath(p pos.Position) bool {
-	for _, n := range m.paths {
-		for n2 := n; n2.cameFrom != nil; n2 = n2.cameFrom {
-			if n2.P == p {
-				return true
-			}
+func (m *Maze) CalculateBestPaths(w *Node) {
+	// add all nodes reachable form the end back to start whose distance is min.
+	minDist := math.MaxInt
+	for _, n := range w.cameFrom {
+		if n.Dist < minDist {
+			minDist = n.Dist
 		}
 	}
-	return false
-
-}
-
-func (m *Maze) ShortestPath() map[pos.Position]Node {
-	return m.distances
+	for _, n := range w.cameFrom {
+		if n != nil { //&& n.dist <= minDist {
+			m.BestPath.Add(n.P)
+			m.CalculateBestPaths(n)
+		}
+	}
 }
 
 func IsNotWall(sym uint8) bool {
@@ -138,18 +140,22 @@ func (m *Maze) ChangeSymbol(p pos.Position, sym uint8) {
 }
 
 func (m *Maze) initializeUnvisited(pathSymbol func(sym uint8) bool) {
-	m.unvisited[m.start] = Node{P: m.start, dist: 0}
-	m.distances[m.start] = m.unvisited[m.start]
+	startNode := Node{P: m.Start, Dist: 0}
+	m.unvisited[m.Start] = &startNode
+	m.Nodes[m.Start] = &startNode
+	//m.paths = append(m.paths, &startNode)
 	for y := 0; y < len(m.field); y++ {
 		for x := 0; x < len(m.field[y]); x++ {
 			if pathSymbol(m.field[y][x]) {
-				if x != m.start.X || y != m.start.Y {
+				if x != m.Start.X || y != m.Start.Y {
 					p := pos.Position{X: x, Y: y}
-					m.unvisited[p] = Node{P: p, dist: math.MaxInt}
+					m.unvisited[p] = &Node{P: p, Dist: math.MaxInt}
+					m.Nodes[p] = m.unvisited[p]
 				}
 			}
 		}
 	}
+	m.EndNode = *m.unvisited[m.End]
 }
 
 func (m *Maze) selectNextNode(result *Node) bool {
@@ -159,18 +165,31 @@ func (m *Maze) selectNextNode(result *Node) bool {
 	}
 	for p := range m.unvisited {
 		node := m.unvisited[p]
-		if node.dist < minS {
-			*result = node
-			minS = node.dist
+		if node.Dist < minS {
+			*result = *node
+			minS = node.Dist
 		}
 	}
 	return minS < math.MaxInt
 }
 
+func (m *Maze) IsOnBestPath(p pos.Position) bool {
+	for _, n := range *m.BestPath.Elements() {
+		if n == p {
+			return true
+		}
+	}
+	return false
+}
+
+func (m *Maze) DistanceFromStart(p pos.Position) int {
+	return m.Nodes[p].Dist
+}
+
 func (m *Maze) PrintMaze() {
 	for y, v := range m.field {
 		for x, c := range v {
-			if m.IsOnShortestPath(pos.Position{X: x, Y: y}) {
+			if m.IsOnBestPath(pos.Position{X: x, Y: y}) {
 				fmt.Print(term.YELLOW + string(c) + term.WHITE)
 			} else {
 				switch c {
