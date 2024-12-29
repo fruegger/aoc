@@ -35,7 +35,7 @@ var doorMoves = map[uint8]map[uint8][]string{
 		'3': {"^>", ">^"},
 		'4': {"^^<", "^<^"},
 		'5': {"^^"},
-		'6': {"^^>", "^>^", ">^>"},
+		'6': {"^^>", "^>^", ">^^"},
 		'7': {"^^^<", "^^<^", "^<^^"},
 		'8': {"^^^"},
 		'9': {"^^^>", "^^>^", "^>^^", ">^^^"},
@@ -51,7 +51,7 @@ var doorMoves = map[uint8]map[uint8][]string{
 		'6': {"^>>", ">^>", ">>^"},
 		'7': {"^^"},
 		'8': {"^^>", "^>^", ">^^"},
-		'9': {"^^>>", "^>^>", "^>>^", ">^>^", ">^>^"},
+		'9': {"^^>>", "^>^>", "^>>^", ">^>^", ">^^>", ">>^^"},
 	},
 	'2': {
 		'A': {"v>", ">v"},
@@ -75,12 +75,12 @@ var doorMoves = map[uint8]map[uint8][]string{
 		'4': {"^<<", "<^<", "<<^"},
 		'5': {"^<", "<^"},
 		'6': {"^"},
-		'7': {"^^<<", "^<^<", "<^<^", "<<^^"},
+		'7': {"^^<<", "^<^<", "^<<^", "<^<^", "<^^<", "<<^^"},
 		'8': {"^^<", "^<^", "<^^"},
 		'9': {"^^"},
 	},
 	'4': {
-		'A': {">>vv", ">v>v", ">vv>^", "v>v>"},
+		'A': {">>vv", ">v>v", ">vv>", "v>v>"},
 		'0': {">vv", "v>v"},
 		'1': {"v"},
 		'2': {">v", "v>"},
@@ -218,49 +218,78 @@ func main() {
 			})
 	}
 
-	printKeyboards(door, robots)
+	printKeyboards(door, robots[0])
 	fmt.Println()
-
 	lines = common.ReadDayFile(21, "input")
+
 	total := 0
 	for _, line := range lines {
-		total += codeComplexity(line, door, robots, 2)
+		total += codeComplexity(line, door, 2)
 	}
 	fmt.Println("Part1: ", total)
 
 	total = 0
 	for _, line := range lines {
-		total += codeComplexity(line, door, robots, 25)
+		total += codeComplexity(line, door, 25)
 	}
 	fmt.Println("Part2: ", total)
 
 }
 
-func codeComplexity(code string, door Keyboard, robots []Keyboard, chainLen int) int {
-	codeval := common.StringToNum(code[:len(code)-1])
-	result := door.enterCode(code)
-	for i := 0; i < len(robots) && i < chainLen; i++ {
-		var result2 []string
-		for _, c := range result {
-			part := robots[i].enterCode(c)
-			for _, p := range part {
-				result2 = append(result2, p)
+func codeComplexity(doorCode string, door Keyboard, chainLen int) int {
+	codeval := common.StringToNum(doorCode[:len(doorCode)-1])
+	codes := door.enterCode(doorCode)
+
+	minLen := math.MaxInt
+	fmt.Println(doorCode, ":")
+	for _, code := range codes {
+		l := codeLen(code, chainLen-1) - 1
+		if minLen > l {
+			minLen = l
+		}
+		fmt.Println(code, ":", l)
+
+	}
+	fmt.Println(codeval, "*", minLen)
+	return codeval * minLen
+}
+
+func codeLen(code string, level int) int {
+	code2 := "A" + code + "A"
+	result := 0
+	for i := 0; i+1 < len(code2); i++ {
+		result += pairLen(code2[i], code2[i+1], level)
+	}
+	return result
+}
+
+type pairCoord struct {
+	s1    uint8
+	s2    uint8
+	level int
+}
+
+var pairCache = map[pairCoord]int{}
+
+func pairLen(s1, s2 uint8, level int) int {
+	val, found := pairCache[pairCoord{s1: s1, s2: s2, level: level}]
+	if found {
+		return val
+	}
+	if level == 0 {
+		val = len(robotMoves[s1][s2][0]) + 1 // for the A at the end
+	} else {
+		minVal := math.MaxInt
+		for _, m := range robotMoves[s1][s2] {
+			val = codeLen(m, level-1)
+			if val < minVal {
+				minVal = val
 			}
 		}
-		result = result2
+		val = minVal
 	}
-	minL := math.MaxInt
-	var best string
-	for _, r := range result {
-		if len(r) < minL {
-			minL = len(r)
-			best = r
-		}
-	}
-
-	resultLen := len(best)
-	fmt.Println(resultLen, " * ", codeval, " - ", result)
-	return codeval * resultLen
+	pairCache[pairCoord{s1: s1, s2: s2, level: level}] = val
+	return val
 }
 
 func (k *Keyboard) enterCode(code string) []string {
@@ -292,21 +321,20 @@ func (k *Keyboard) pushKey(sym uint8) []string {
 	return result
 }
 
-func printKeyboards(door Keyboard, robots []Keyboard) {
-	fmt.Println("Door          " + term.YELLOW + "|" + term.WHITE + " Robot1        " + term.YELLOW + "|" + term.WHITE + " Robot2        " + term.YELLOW + "|" + term.WHITE + " Robot3")
+func printKeyboards(door Keyboard, r Keyboard) {
+	fmt.Println("Door          " + term.YELLOW + "|" + term.WHITE + " Robot")
 	for y := 0; y < len(door.field); y++ {
 		for x := 0; x < len(door.field[y]); x++ {
 			fmt.Print(coloredSym(door.field[y][x], door.sym == door.field[y][x]))
 		}
-		for _, r := range robots {
-			fmt.Print(term.YELLOW + " | " + term.WHITE)
-			if y < len(r.field) {
-				for x := 0; x < len(r.field[y]); x++ {
-					fmt.Print(coloredSym(r.field[y][x], r.field[y][x] == r.sym))
-				}
-			} else {
-				fmt.Print("             ")
+
+		fmt.Print(term.YELLOW + " | " + term.WHITE)
+		if y < len(r.field) {
+			for x := 0; x < len(r.field[y]); x++ {
+				fmt.Print(coloredSym(r.field[y][x], r.field[y][x] == r.sym))
 			}
+		} else {
+			fmt.Print("             ")
 		}
 		fmt.Println()
 	}
@@ -325,20 +353,3 @@ func coloredSym(s uint8, highlight bool) string {
 		return string(s)
 	}
 }
-
-/*
-029A: <vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A
-029A- v<A<AA>>^A<AA<^A>Av<<A>>^A<A^Av<<A>>^AAv<A>A^A<A>Av<A<A>>^AAA<A<^A>A
-
-980A: <v<A>>^AAAvA^A<vA<AA>>^AvAA<^A>A<v<A>A>^AAAvA<^A>A<vA>^A<A>A
-980A- v<<A>>^AAA<A^Av<A<AA>>^AA<AA<^A>Av<A<A>>^AAA<A<^A>Av<<A>>^A<A>A
-
-179A: <v<A>>^A<vA<A>>^AAvAA<^A>A<v<A>>^AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A
-179A- v<<A>>^Av<A<A>>^AA<AA<^A>Av<<A>>^AA<A^Av<<A>>^AA<A>Av<A<A>>^AAA<A<^A>A
-
-456A: <v<A>>^AA<vA<A>>^AAvAA<^A>A<vA>^A<A>A<vA>^A<A>A<v<A>A>^AAvA<^A>A
-456A- v<<A>>^AAv<A<A>>^AA<AA<^A>Av<<A>>^A<A>Av<<A>>^A<A>Av<A<A>>^AA<A<^A>A
-
-379A: <v<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A
-379A- v<<A>>^A<A^Av<<A>>^AAv<A<A>>^AA<AA<^A>Av<<A>>^AA<A>Av<A<A>>^AAA<A<^A>A
-*/

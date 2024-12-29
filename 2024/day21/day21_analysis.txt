@@ -1,0 +1,95 @@
+Transitions:
+        A       ^       <       v       >
+A       A       <A      v<<A    v<A     vA
+                        <v<A    <vA
+^       >A      A       v<A     vA      v>A
+                                        >vA
+<       >>^A    >^A     A       >A      >>A
+        >^>A
+v       >^A     ^A      <A      A       >A
+        ^>A
+>       ^A      <^A     <<A     <A      A
+                ^<A
+
+Possible Sequences:
+AA
+A<A
+Av<<A
+Av<A
+AvA
+A<v<A
+A<vA
+A>A
+Av>A
+A>vA
+A>>^A
+A>^A
+A>>A
+A>^>A
+A^A
+A^>A
+A<^A
+A<<A
+A^<A
+
+Example
+-----
+
+-> 379A
+[A3] ^A
+[37] ^^<<A
+[79] >>A
+[9A] vvvA
+
+-> ^A^^<<A>>AvvvA [len = 14]
+vs ^A<<^^A>>AvvvA [len = 14]
+[A^] <A
+[^A] >A
+[A^] <A
+[^^] A
+[^<] v<A
+[<<] A
+[<A] >>^A
+[A>] vA
+[>>] A
+[>A] ^A
+[Av] v<A
+[vv] A
+[vv] A
+[vA] <^A
+
+-> <A>A<AAv<AA>>^AvAA^Av<AAA<^A [len = 28, rep = 6]
+vs <A>Av<<AA>^AA>AvAA^A<vAAA>^A [len = 28, rep = 6]
+
+[A<] v<<A vs. [] <v<A
+[<A] >>^A vs. [] >>^A
+[A>] vA   vs. [] vA
+[>A] ^A   vs. [] ^A
+[A<] v<<A vs. [] <vA
+[<A] >>^A vs. [] <A
+[AA] A    vs. [] A
+[Av] v<A  vs. [] >>^A
+[v<] <A   vs. [] A
+[<A] >>^A vs. [] vA
+[AA] A    vs. [] <^A
+[A>] vA   vs. [] >A
+[>>] A    vs. [] A
+[>^] <^A  vs. [] vA
+[^A] >A   vs. [] ^A
+[Av] v<A  vs. [] <vA
+[vA] >^A  vs. [] >^A
+[AA] A    vs. [] A
+[A^] <A   vs. [] <A
+[^A] >A   vs. [] >A
+[Av] v<A  vs. [] <v<A
+[v<] <A   vs. [] >A
+[<A] >>^A vs. [] >^A
+[AA] A    vs. [] A
+[AA] A    vs. [] A
+[A<] v<A  vs. [] vA
+[<^] >^A  vs. [] <^A
+[^A] >A   vs. [] >A
+
+-> v<<A>>^AvA^Av<<A>>^AAv<A<A>>^AAvAA<^A>Av<A>^AA<A>Av<A<A>>^AAAv<A>^A>A [len = 68]
+vs <v<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A [len =64]
+<-  <A>Av<<AA>^AA>AvAA^A<vAAA>^A
