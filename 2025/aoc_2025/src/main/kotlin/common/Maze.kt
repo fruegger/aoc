@@ -1,7 +1,7 @@
 package common
 
 data class Cell(
-    val symbol: Char,
+    var symbol: Char,
     val pos: Position
 )
 
@@ -70,7 +70,12 @@ abstract class Maze(input: AocInput, val start: Position, val end: Position) : G
         }
     }
 
+
     fun symbolAt(p : Position) = nodes[p.y][p.x].data.symbol
+    fun changeSymbol(p : Position, sym : Char) {
+        nodes[p.y][p.x].data.symbol = sym
+    }
+
     val width : Int get() = nodes[0].size
     val heigth : Int get() = nodes.size
 

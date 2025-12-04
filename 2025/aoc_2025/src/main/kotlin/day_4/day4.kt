@@ -12,6 +12,7 @@ import common.VT100
 class PaperRollMaze(input: AocInput, start: Position, end: Position) : Maze(input, start, end) {
     companion object {
         const val PAPER_ROLL = '@'
+        const val NOTHING = '.'
     }
 
     override fun isPathSymbol(c: Cell) = true
@@ -55,4 +56,27 @@ fun main() {
     }
     print("Part 1: ")
     println(VT100.blue { "$tot" })
+
+
+    var tot2 = 0
+    val accessibleRolls = mutableSetOf<Position>()
+    do {
+        accessibleRolls.clear()
+        maze.allNodes.forEach {
+            val pos = it.data.pos
+            if (maze.isRoll(pos) && maze.countAdjecentRolls(pos) < 4) {
+                tot2++
+                accessibleRolls.add(pos)
+            }
+        }
+        accessibleRolls.forEach {
+            maze.changeSymbol(it, PaperRollMaze.NOTHING)
+        }
+        maze.print()
+        println()
+        println(tot2)
+        println()
+    } while (accessibleRolls.isNotEmpty())
+    print("Part 2:")
+    println(tot2)
 }
