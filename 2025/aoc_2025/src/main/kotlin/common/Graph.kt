@@ -2,7 +2,7 @@ package common
 
 data class Node<T>(
     val data : T,
-    var distanceFromStart : Int,
+    var distanceFromStart : Int = INFINITY,
     var predecessor : Node<T>? =null,
     var visited : Boolean = false
 )
@@ -11,8 +11,8 @@ const val INFINITY = Int.MAX_VALUE
 
 interface Graph<T> {
     val startNode : Node<T>
-    val allNodes : List<Node<T>>
-    fun neighboursOf(n : Node<T>) : List<Node<T>>
+    val allNodes : Sequence<Node<T>>
+    fun neighboursOf(n : Node<T>) : Sequence<Node<T>>
     fun distance(n1 : Node<T>, n2 : Node<T>) : Int
 }
 

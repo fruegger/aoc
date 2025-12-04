@@ -24,9 +24,10 @@ object VT100 {
     const val CODE_BLINK = "$ESC[5m"
     const val CODE_REVERSE = "$ESC[7m"
 
-    fun green(s : () -> String) = "$CODE_GREEN${s()}$CODE_NORMAL"
-    fun blue(s : () -> String) = "$CODE_BLUE${s()}$CODE_NORMAL"
-    fun red(s : () -> String) = "$CODE_RED${s()}$CODE_NORMAL"
-    fun white(s : () -> String) = "$CODE_WHITE${s()}$CODE_NORMAL"
-    fun yellow(s : () -> String) = "$CODE_YELLOW${s()}$CODE_NORMAL"
+    fun highlightIf(condition : Boolean, code : String, s : () -> String) = if (condition) {"$code${s()}$CODE_NORMAL"} else s
+    fun green(condition : Boolean = true, s : () -> String) = highlightIf(condition,CODE_GREEN, s)
+    fun blue(condition : Boolean = true, s : () -> String) = highlightIf(condition,CODE_BLUE, s)
+    fun red(condition : Boolean = true, s : () -> String) = highlightIf(condition,CODE_BLUE, s)
+    fun white(condition : Boolean = true, s : () -> String) = highlightIf(condition,CODE_WHITE, s)
+    fun yellow(condition : Boolean = true, s : () -> String) = highlightIf(condition,CODE_YELLOW, s)
 }

@@ -1,6 +1,6 @@
 package common
 
-class Position(val x: Int, val y: Int) {
+data class Position(val x: Int, val y: Int) {
     fun equals(p2: Position): Boolean = x == p2.x && y == p2.y
     fun move(d: Direction): Position = Position(x = x + d.dx, y = y + d.dy)
     fun add(d: Distance): Position = Position(x = x + d.dx, y = y + d.dy)
@@ -9,10 +9,7 @@ class Position(val x: Int, val y: Int) {
 
 typealias Dimension = Position
 
-class Distance(
-    val dx: Int,
-    val dy: Int
-)
+data class Distance(val dx: Int, val dy: Int)
 
 enum class Direction(
     dx: Int,
@@ -40,7 +37,7 @@ enum class Direction(
             UP -> RIGHT
         }
 
-    fun TurnLeft(): Direction =
+    fun turnLeft(): Direction =
         when (this) {
             RIGHT -> UP
             UP -> LEFT
@@ -48,7 +45,7 @@ enum class Direction(
             DOWN -> RIGHT
         }
 
-    fun Opposite(): Direction =
+    fun opposite(): Direction =
         when (this) {
             RIGHT -> LEFT
             DOWN -> UP
